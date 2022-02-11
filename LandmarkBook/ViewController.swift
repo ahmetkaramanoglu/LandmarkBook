@@ -13,6 +13,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var landmarkImages = [UIImage]()
     @IBOutlet weak var tableview: UITableView!
     
+    var selectedIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         landmarkImages.append(UIImage(named: "rize")!)
         landmarkImages.append(UIImage(named: "istanbul")!)
         landmarkImages.append(UIImage(named: "corum")!)
+        
+        navigationItem.title = "Landmark Book"
 
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -41,8 +44,26 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         cell.textLabel?.text = landmarkNames[indexPath.row]
         return cell
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return landmarkNames.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //Seçilen indexi VC değişmeden öğreniyoruz.
+        selectedIndex = indexPath.row
+        performSegue(withIdentifier: "toImageVC", sender: nil)
+            
+        
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "toImageVC"{
+            let destination = segue.destination as! imageViewController
+            destination.tempLabel = landmarkNames[selectedIndex]
+            destination.tempImage = landmarkImages[selectedIndex]
+        }
+        
     }
 
 
